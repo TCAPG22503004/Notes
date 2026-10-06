@@ -6,6 +6,8 @@ public class playerMovement : MonoBehaviour
 
 	Rigidbody2D rb;
 
+	int lane = 1;
+
 	void Awake() {
 
 		rb = this.gameObject.GetComponent<Rigidbody2D>();
@@ -40,28 +42,28 @@ public class playerMovement : MonoBehaviour
 			Input.GetKey(KeyCode.W) ||
 			Input.GetKey(KeyCode.UpArrow)
 		) {
-			velocity.y += MoveY();
+			velocity.y += speed;
 		}
 
 		if (
 			Input.GetKey(KeyCode.A) ||
 			Input.GetKey(KeyCode.LeftArrow)
 		) {
-			velocity.x -= MoveX();
+			velocity.x -= speed;
 		}
 
 		if (
 			Input.GetKey(KeyCode.S) ||
 			Input.GetKey(KeyCode.DownArrow)
 		) {
-			velocity.y -= MoveY();
+			velocity.y -= speed;
 		}
 
 		if (
 			Input.GetKey(KeyCode.D) ||
 			Input.GetKey(KeyCode.RightArrow)
 		) {
-			velocity.x += MoveX();
+			velocity.x += speed;
 		}
 
 
@@ -70,29 +72,19 @@ public class playerMovement : MonoBehaviour
 
 
 		// move
-		rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+		velocity *= Time.fixedDeltaTime;
+		Vector2 newPos = ToTrapezoid(velocity);
+		rb.MovePosition(newPos);
 
 		return;
 	}
 
 
-	float MoveX() {
-
-		return speed;
-
-	}
-
-	float MoveY() {
-
-		return speed;
-
-	}
-
 	float ResetY() {
 
 		int sign = 0;
 
-		float y = rb.position.y - (-4.4f);
+		float y = rb.position.y - (laneParameter.Instance.LaneY[lane]);
 
 		if (Mathf.Abs(y) < 0.0001) {
 			// remain 0
@@ -109,4 +101,49 @@ public class playerMovement : MonoBehaviour
 		return speed * sign;
 
 	}
+
+
+	Vector2 ToTrapezoid(Vector2 v) {
+
+		// correct velocity x
+		float dy = laneParameter.Instance.LaneY[2] - laneParameter.Instance.LaneY[0];
+		float normalizedY = (1 / dy * rb.position.y) - (laneParameter.Instance.LaneY[0] / dy);
+		float ratio = (1 + ((laneParameter.Instance.LenRatio-1) * normalizedY));
+		v.x *= ratio;
+
+		// add x when |y| > 0
+		float maxLength = laneParameter.Instance.TopLength / 2 * ratio;
+		float normalizedX = rb.position.x / maxLength;
+		if (v.x == 0) v.x += ratio * -normalizedX * v.y;
+
+		// into stage
+		v += rb.position;
+		normalizedY = (1 / dy * v.y) - (laneParameter.Instance.LaneY[0] / dy);
+		ratio = (1 + ((laneParameter.Instance.LenRatio-1) * normalizedY));
+
+		float xMax = laneParameter.Instance.TopLength / 2 * ratio;
+		float xMin = -xMax;
+		float yMax = laneParameter.Instance.LaneY[0];
+		float yMin = laneParameter.Instance.LaneY[2];
+
+		if (v.x > xMax) v.x = xMax;
+		if (v.x < xMin) v.x = xMin;
+		if (v.y > yMax) v.y = yMax;
+		if (v.y < yMin) v.y = yMin;
+		
+		return v;
+
+	}
+
+/*
+	float GetRatio(float y) {
+
+		float dy = laneY[2] - laneY[0];
+
+		float ratio = (1 / dy * y) - (laneY[0] / dy);
+
+		return (1 + ((lenRatio-1) * ratio));
+
+	}
+*/
 }
