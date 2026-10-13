@@ -2,22 +2,16 @@ using UnityEngine;
 
 public class playerMovement : MonoBehaviour
 {
-	[SerializeField] float speed;
+	[SerializeField] Rigidbody2D rb;
+	[SerializeField] SpriteRenderer sr;
 
-	Rigidbody2D rb;
+	float speed = 1.5f;
 
-	int lane = 1;
-
-	void Awake() {
-
-		rb = this.gameObject.GetComponent<Rigidbody2D>();
-
-	}
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
-		
+		sr.sortingOrder = (int)(-10 * rb.position.y);
 	}
 
 	// Update is called once per frame
@@ -68,15 +62,35 @@ public class playerMovement : MonoBehaviour
 
 
 		// fit lane
+		if (velocity.y != 0) CheckCurrentLane();
 		if (velocity.y == 0) velocity.y += ResetY();
 
+		// change value by non-monobehaviour class
+		velocity *= Time.fixedDeltaTime;
+		float x = velocity.x;
+		float y = velocity.y;
+		etc.ToTrapezoid(rb.position.x, rb.position.y, ref x, ref y);
+		Vector2 newPos = new Vector2(x, y);
 
 		// move
-		velocity *= Time.fixedDeltaTime;
-		Vector2 newPos = ToTrapezoid(velocity);
+//		velocity *= Time.fixedDeltaTime;
+//		Vector2 newPos = ToTrapezoid(velocity);
 		rb.MovePosition(newPos);
+		if (velocity.y != 0) sr.sortingOrder = (int)(-10 * rb.position.y);
 
 		return;
+	}
+
+
+	void CheckCurrentLane() {
+
+		int nearest = etc.SetLane(rb.position.y);	// from non-monobehaviour class
+
+		if (nearest != playerParameter.Instance.Lane) laneEffect.Instance.StartFlash(nearest);
+		playerParameter.Instance.Lane = nearest;
+
+		return;
+
 	}
 
 
@@ -84,7 +98,7 @@ public class playerMovement : MonoBehaviour
 
 		int sign = 0;
 
-		float y = rb.position.y - (laneParameter.Instance.LaneY[lane]);
+		float y = rb.position.y - (laneParameter.Instance.LaneY[playerParameter.Instance.Lane]);
 
 		if (Mathf.Abs(y) < 0.0001) {
 			// remain 0
@@ -134,16 +148,4 @@ public class playerMovement : MonoBehaviour
 		return v;
 
 	}
-
-/*
-	float GetRatio(float y) {
-
-		float dy = laneY[2] - laneY[0];
-
-		float ratio = (1 / dy * y) - (laneY[0] / dy);
-
-		return (1 + ((lenRatio-1) * ratio));
-
-	}
-*/
 }
