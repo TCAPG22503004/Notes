@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class laneEffect : MonoBehaviour
 {
-	public static laneEffect Instance;
-
 	[SerializeField] SpriteRenderer[] sr = new SpriteRenderer[3];
 
 	float speed = 250;
@@ -14,6 +12,7 @@ public class laneEffect : MonoBehaviour
 	float a0 = 110;
 
 	float[] alpha = new float[3];
+	Color32 c32;
 
 	void Awake() {
 
@@ -22,17 +21,10 @@ public class laneEffect : MonoBehaviour
 			alpha[i] = 0;
 		}
 
-		// set instance
-		Instance = this;
-
+		// set color rgb
+		c32 = new Color32(r, g, b, 0);
 	}
-
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
-	{
-		
-	}
-
+	
 	// Update is called once per frame
 	void Update()
 	{
@@ -54,14 +46,15 @@ public class laneEffect : MonoBehaviour
 
 			if (alpha[i] > 0) {
 
+				// set alpha
 				alpha[i] -= speed * Time.deltaTime;
-
+				if (alpha[i] < 0) alpha[i] = 0;
 				byte a = (byte)alpha[i];
 
-				sr[i].color = new Color32(r, g, b, a);
-
+				// change color
+				c32.a = a;
+				sr[i].color = c32;
 			}
-
 		}
 
 		return;

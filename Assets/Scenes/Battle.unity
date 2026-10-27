@@ -131,10 +131,9 @@ GameObject:
   - component: {fileID: 201492349}
   - component: {fileID: 201492348}
   - component: {fileID: 201492347}
-  - component: {fileID: 201492350}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -169,6 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 201492348}
   sr: {fileID: 1748520520}
+  playerParameter: {fileID: 11400000, guid: d7a8c0754b584ac4089d1c6f8b4c86ed, type: 2}
 --- !u!50 &201492348
 Rigidbody2D:
   serializedVersion: 5
@@ -242,18 +242,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.75, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &201492350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 201492345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c15f2928b692fc7408df221ccfb81505, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &502262453
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,7 +252,6 @@ GameObject:
   m_Component:
   - component: {fileID: 502262454}
   - component: {fileID: 502262455}
-  - component: {fileID: 502262456}
   m_Layer: 0
   m_Name: Lane
   m_TagString: Untagged
@@ -291,18 +278,6 @@ Transform:
   m_Father: {fileID: 659785754}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &502262455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 502262453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 137ae6fec7ab96047be2cdb86256a0fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &502262456
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
