@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07276b3811e9d0f45b089a703c1863fc, type: 3}
   m_Name: enemyParameter
   m_EditorClassIdentifier: 
-  speed: 0
-  lane: 0
+  speed: 1
+  lane: 2
+  attackRange: 1

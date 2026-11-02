@@ -11,11 +11,13 @@ public class playerMovement : MonoBehaviour
 
 	void Start()
 	{
-		sr.sortingOrder = (int)(-10 * rb.position.y);
+		
 	}
 	
 	void FixedUpdate() 
 	{
+		sr.sortingOrder = (int)(-10 * rb.position.y);
+
 		Movement();
 	}
 
@@ -64,11 +66,8 @@ public class playerMovement : MonoBehaviour
 		pos.y = y;
 		rb.MovePosition(pos);
 
-		// sorting order & lane effect
-		if (dy != 0) {
-			sr.sortingOrder = (int)(-10 * y);
-			if (playerParameter.lane != oldLane) effect.StartFlash(playerParameter.lane);
-		}
+		// lane effect
+		if (playerParameter.lane != oldLane) effect.StartFlash(playerParameter.lane);
 
 		return;
 
