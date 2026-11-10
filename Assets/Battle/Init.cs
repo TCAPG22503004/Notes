@@ -7,4 +7,13 @@ public class Init : MonoBehaviour
 	void Awake() {
 		Common.Init(lane);
 	}
+
+
+	# if UNITY_EDITOR
+	void Update() {
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			UnityEditor.EditorApplication.isPlaying = false;
+		}
+	}
+	# endif
 }

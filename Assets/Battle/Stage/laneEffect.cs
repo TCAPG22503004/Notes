@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class laneEffect : MonoBehaviour
 {
+	public static laneEffect instance;
+
 	[SerializeField] SpriteRenderer[] sr = new SpriteRenderer[3];
 
 	float speed = 250;
@@ -15,6 +17,9 @@ public class laneEffect : MonoBehaviour
 	Color32 c32;
 
 	void Awake() {
+
+		// set instance
+		instance = this;
 
 		// set alpha
 		for (int i = 0; i < 3; i++) {
